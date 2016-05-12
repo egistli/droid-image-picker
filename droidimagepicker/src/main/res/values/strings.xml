@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Droid Image Picker</string>
+    <string name="pick_image_intent_text">Choose image from</string>
+</resources>
