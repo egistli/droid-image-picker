@@ -20,7 +20,7 @@ So there should be a wrapper around this flow to simply the developement.
 put this line in you `build.gradle` `dependency` section:
 
 ```gradle
-compile 'com.egistli.droid-image-picker:droid-image-picker:0.0.1'
+compile 'com.egistli.droid-image-picker:droid-image-picker:0.0.2+'
 ```
 
 And you're good to go.
@@ -79,13 +79,13 @@ public void imagePickerSetUpCropDetail(ImagePicker imagePicker, Crop crop) {
 This crop part is depending on [android-crop](https://github.com/jdamcd/android-crop) project.
 If you want corpping, jut return `true` in `imagePickerShouldCrop` and set up `Crop` object in `imagePickerSetUpCropDetail` with the methods like `crop.asSquare()`, `crop.with*()`.
 
-# Thanks/Reference 
+## Thanks/Reference 
 Without these informative posts I won't be able to create this wrapper and upload it to JCenter.
 
 [Gist of ImagePicker] (https://gist.github.com/Mariovc/f06e70ebe8ca52fbbbe2) from [Mariovc](https://gist.github.com/Mariovc)
 
 [How to distribute your own Android library through jCenter and Maven Central from Android Studio - The Cheese Factory Blog](https://inthecheesefactory.com/blog/how-to-upload-library-to-jcenter-maven-central-as-dependency/en)
 
-# License
+## License
 
 Apache 2.0
