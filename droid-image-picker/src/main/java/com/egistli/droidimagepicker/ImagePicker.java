@@ -50,6 +50,11 @@ public class ImagePicker {
      * the result will be `true`, otherwise it'll be `false`.
      */
     public boolean handleActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if (resultCode == Activity.RESULT_CANCELED) {
+            callback.imagePickerDidCancel(this);
+            return true;
+        }
+
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             final Bitmap bitmap = getImageFromResult(resultCode, data);
             final String outputFilePath = context.getExternalCacheDir() + File.separator + "output.jpg";
@@ -63,10 +68,12 @@ public class ImagePicker {
                 callback.imagePickerSetUpCropDetail(this, crop);
                 crop.start(activity, REQUEST_CROP_IMAGE);
             }
+            return true;
         } else if (requestCode == REQUEST_CROP_IMAGE && resultCode == Activity.RESULT_OK) {
             final String croppedOutputFilePath = context.getExternalCacheDir() + File.separator + "cropped-output.jpg";
             final Bitmap croppedBitmap = BitmapUtility.decodeBitmap(context.getContentResolver(), Uri.fromFile(new File(croppedOutputFilePath)), 1);
             notifyFinish(croppedBitmap);
+            return true;
         }
         return false;
     }

@@ -1,1 +1,1 @@
-include ':app', ':droidimagepicker'
+include ':app', ':droid-image-picker'
