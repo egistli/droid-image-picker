@@ -1,5 +1,9 @@
 #Droid Image Picker
 
+## What you can complete with this instantly
+
+![Demo](http://i.giphy.com/UPWnlzfcLsT1m.gif)
+
 ## Why
 
 As a developer with iOS experience, to make user select an image w/wo crop to square is pretty simple: make an instance of UIImagePickerController and it'll handle the flow then give back the image and editoral infromation via delegate methods.
