@@ -7,7 +7,7 @@ As a developer with iOS experience, to make user select an image w/wo crop to sq
 But on android it's not the case. You have to:
 
 1. Start activities for (with proper extras) selecting image
-2. Parse activity results with some strange rules, load in bitmap and rotate it accordingly
+2. Parse activity results with some strange rules, load bitmap/EXIF and rotate it accordingly
 3. Start activity for cropping
 4. Parse activity results to get the final bitmap
 
@@ -19,7 +19,7 @@ So there should be a wrapper around this flow to simply the developement.
 
 put this line in you `build.gradle` `dependency` section:
 
-```
+```gradle
 compile 'com.egistli.droid-image-picker:droid-image-picker:0.0.1'
 ```
 
@@ -29,7 +29,7 @@ And you're good to go.
 
 In the actiivty you need to select image, do the following:
 
-```
+```java
 private void onSelectImageButtonClick() {
 	imagePicker = new ImagePicker(this, this, 480);
 	imagePicker.prompt();
@@ -47,7 +47,7 @@ private void onSelectImageButtonClick() {
 
 This is pretty much it can be, but there are some behaviour `ImagePicker` need to know, so you have to make the activity implment the `ImagePickerDelegate` like following:
 
-```
+```java
 @Override
 public void imagePickerDidCancel(ImagePicker imagePicker) {
     Toast.makeText(this, "Image Picker is canceled", Toast.LENGTH_SHORT).show();
@@ -78,3 +78,14 @@ public void imagePickerSetUpCropDetail(ImagePicker imagePicker, Crop crop) {
 
 This crop part is depending on [android-crop](https://github.com/jdamcd/android-crop) project.
 If you want corpping, jut return `true` in `imagePickerShouldCrop` and set up `Crop` object in `imagePickerSetUpCropDetail` with the methods like `crop.asSquare()`, `crop.with*()`.
+
+# Thanks/Reference 
+With below informative post I can create this wrapper and upload it to JCenter.
+
+
+
+[How to distribute your own Android library through jCenter and Maven Central from Android Studio - The Cheese Factory Blog](https://inthecheesefactory.com/blog/how-to-upload-library-to-jcenter-maven-central-as-dependency/en)
+
+# License
+
+Apache 2.0
