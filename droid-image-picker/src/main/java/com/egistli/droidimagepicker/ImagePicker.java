@@ -10,6 +10,8 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 
 import com.soundcloud.android.crop.Crop;
 
@@ -31,6 +33,7 @@ public class ImagePicker {
     final Context context;
     private final ImagePickerDelegate callback;
     private final int maxLength;
+    private Object promptSource;
 
     public ImagePicker(final Activity activity, final ImagePickerDelegate callback, final int maxLength) {
         this.activity = activity;
@@ -39,8 +42,28 @@ public class ImagePicker {
         this.maxLength = maxLength;
     }
 
-    public void prompt() {
-        promptSourceChooser();
+    public void promptWithFragment(Fragment fragment) {
+        promptSource = fragment;
+        final List<Intent> intentList = getIntentListOfPromptSourceChooser();
+        if (intentList.size() > 0) {
+            final Intent chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1), context.getString(R.string.pick_image_intent_text));
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[intentList.size()]));
+            fragment.startActivityForResult(chooserIntent, REQUEST_PICK_IMAGE);
+        } else {
+            callback.imagePickerDidFailToSelectImage(this, ImagePickerError.NO_INTENTS_AVAILABLE);
+        }
+    }
+
+    public void promptWithActivity(Activity activity) {
+        promptSource = activity;
+        final List<Intent> intentList = getIntentListOfPromptSourceChooser();
+        if (intentList.size() > 0) {
+            final Intent chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1), context.getString(R.string.pick_image_intent_text));
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[intentList.size()]));
+            activity.startActivityForResult(chooserIntent, REQUEST_PICK_IMAGE);
+        } else {
+            callback.imagePickerDidFailToSelectImage(this, ImagePickerError.NO_INTENTS_AVAILABLE);
+        }
     }
 
     /**
@@ -66,7 +89,11 @@ public class ImagePicker {
                 final String croppedOutputFilePath = context.getExternalCacheDir() + File.separator + "cropped-output.jpg";
                 final Crop crop = Crop.of(Uri.fromFile(new File(outputFilePath)), Uri.fromFile(new File(croppedOutputFilePath)));
                 callback.imagePickerSetUpCropDetail(this, crop);
-                crop.start(activity, REQUEST_CROP_IMAGE);
+                if (promptSource instanceof Activity) {
+                    crop.start(activity, REQUEST_CROP_IMAGE);
+                } else if (promptSource instanceof Fragment) {
+                    crop.start(context, (Fragment)promptSource, REQUEST_CROP_IMAGE);
+                }
             }
             return true;
         } else if (requestCode == REQUEST_CROP_IMAGE && resultCode == Activity.RESULT_OK) {
@@ -86,7 +113,7 @@ public class ImagePicker {
         }
     }
 
-    private void promptSourceChooser() {
+    private List<Intent> getIntentListOfPromptSourceChooser() {
         List<Intent> intentList = new ArrayList<>();
 
         final Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -97,13 +124,7 @@ public class ImagePicker {
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempFile()));
         intentList = addRelatedIntentToList(intentList, takePhotoIntent);
 
-        if (intentList.size() > 0) {
-            final Intent chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1), context.getString(R.string.pick_image_intent_text));
-            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[intentList.size()]));
-            activity.startActivityForResult(chooserIntent, REQUEST_PICK_IMAGE);
-        } else {
-            callback.imagePickerDidFailToSelectImage(this, ImagePickerError.NO_INTENTS_AVAILABLE);
-        }
+        return intentList;
     }
 
     /**

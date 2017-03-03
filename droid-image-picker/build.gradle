@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/egistli/droid-image-picker'
     gitUrl = 'https://github.com/egistli/droid-image-picker.git'
 
-    libraryVersion = '0.0.2'
+    libraryVersion = '0.0.4'
 
     developerId = 'egistli'
     developerName = 'Egist Li'

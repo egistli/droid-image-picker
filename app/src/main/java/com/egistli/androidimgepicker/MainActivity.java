@@ -62,6 +62,6 @@ public class MainActivity extends AppCompatActivity implements ImagePickerDelega
 
     public void onPickButtonClick(View view) {
         this.imagePicker = new ImagePicker(this, this, 480);
-        imagePicker.prompt();
+        imagePicker.promptWithActivity(this);
     }
 }
