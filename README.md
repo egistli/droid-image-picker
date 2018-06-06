@@ -5,10 +5,9 @@
 ![Demo](http://i.giphy.com/UPWnlzfcLsT1m.gif)
 
 ## Why
+In iOS development, allow user to select an image w/wo crop to square is pretty simple: make an instance of UIImagePickerController and it'll handle the flow then give back the image and editoral information via delegate methods.
 
-As a developer with iOS experience, to make user select an image w/wo crop to square is pretty simple: make an instance of UIImagePickerController and it'll handle the flow then give back the image and editoral infromation via delegate methods.
-
-But on android it's not the case. You have to:
+But on android this is not the case. You have to:
 
 1. Start activities for (with proper extras) selecting image
 2. Parse activity results with some strange rules, load bitmap/EXIF and rotate it accordingly
@@ -17,7 +16,7 @@ But on android it's not the case. You have to:
 
 It's not super hard but it definitely will cost you some time longer than you want to spend.
 
-So there should be a wrapper around this flow to simply the developement.
+So there should be a wrapper around this flow to simplify the developement.
 
 ## Installation
 
